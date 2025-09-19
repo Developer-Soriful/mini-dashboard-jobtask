@@ -1,4 +1,4 @@
-"use client";
+"use client"; // ✅ Must be at the top
 
 import { useFetch } from "@/hooks/useFetch";
 import { Post } from "@/types";
