@@ -7,7 +7,7 @@ import Skeleton from "@/components/ui/Skeleton";
 import { motion } from "framer-motion";
 
 interface PageProps {
-  params: any;
+  params: { id: string } | any;
 }
 
 export default function PostDetails({ params }: PageProps) {
