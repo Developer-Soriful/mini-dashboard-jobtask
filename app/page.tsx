@@ -1,103 +1,163 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  CartesianGrid,
+} from "recharts";
+import Skeleton from "@/components/ui/Skeleton";
+
+const data = [
+  { day: "Mon", users: 240, revenue: 1200 },
+  { day: "Tue", users: 320, revenue: 2100 },
+  { day: "Wed", users: 180, revenue: 900 },
+  { day: "Thu", users: 400, revenue: 2500 },
+  { day: "Fri", users: 350, revenue: 2000 },
+  { day: "Sat", users: 500, revenue: 3000 },
+  { day: "Sun", users: 420, revenue: 2700 },
+];
+
+export default function HomePage() {
+  const [loading, setLoading] = useState(true);
+
+  const stats = [
+    {
+      title: "Total Users",
+      value: "2,456",
+      color: "from-indigo-500 to-purple-500",
+    },
+    { title: "Revenue", value: "$12,402", color: "from-green-400 to-teal-500" },
+    {
+      title: "Conversion Rate",
+      value: "4.2%",
+      color: "from-pink-500 to-orange-400",
+    },
+  ];
+
+  // fake loading delay
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <Skeleton />;
+  }
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="p-6 max-w-7xl mx-auto">
+      {/* Page Title */}
+      <motion.h1
+        className="text-4xl md:text-5xl font-extrabold mb-8 text-gray-900"
+        initial={{ opacity: 0, y: -30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        Dashboard Overview
+      </motion.h1>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        {stats.map((stat, index) => (
+          <motion.div
+            key={index}
+            className={`bg-gradient-to-r ${stat.color} rounded-2xl p-6 text-white shadow-xl transform transition-transform hover:scale-105`}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.15, duration: 0.5 }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            <h3 className="text-lg font-semibold">{stat.title}</h3>
+            <p className="text-3xl md:text-4xl font-bold mt-2">{stat.value}</p>
+            <div className="mt-4 h-1 w-1/2 bg-white rounded-full opacity-50"></div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Activity Overview Card */}
+      <motion.div
+        className="rounded-3xl p-6 shadow-2xl hover:shadow-3xl transition-shadow duration-300
+             bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5, duration: 0.6 }}
+      >
+        <h2 className="text-2xl font-semibold mb-4 text-white">
+          Activity Overview
+        </h2>
+
+        <div className="h-64 md:h-72 p-4 bg-white/10 backdrop-blur-md rounded-2xl shadow-inner border border-white/20">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart
+              data={data}
+              margin={{ top: 10, right: 20, left: 0, bottom: 0 }}
+            >
+              <CartesianGrid
+                stroke="rgba(255,255,255,0.2)"
+                strokeDasharray="4 4"
+              />
+              <XAxis dataKey="day" tick={{ fill: "#fff", fontWeight: 600 }} />
+              <YAxis
+                yAxisId="users"
+                orientation="left"
+                tick={{ fill: "#fff", fontWeight: 600 }}
+              />
+              <YAxis
+                yAxisId="revenue"
+                orientation="right"
+                tick={{ fill: "#fff", fontWeight: 600 }}
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "#fff",
+                  borderRadius: "12px",
+                  border: "1px solid #e5e7eb",
+                  boxShadow: "0px 4px 10px rgba(0,0,0,0.1)",
+                }}
+              />
+              <Line
+                yAxisId="users"
+                type="monotone"
+                dataKey="users"
+                stroke="url(#usersGradient)"
+                strokeWidth={3}
+                dot={{ r: 5, strokeWidth: 2, fill: "#fff" }}
+                activeDot={{ r: 7 }}
+              />
+              <Line
+                yAxisId="revenue"
+                type="monotone"
+                dataKey="revenue"
+                stroke="url(#revenueGradient)"
+                strokeWidth={3}
+                dot={{ r: 5, strokeWidth: 2, fill: "#fff" }}
+                activeDot={{ r: 7 }}
+              />
+              <defs>
+                <linearGradient id="usersGradient" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="#ffffff" stopOpacity={0.8} />
+                  <stop offset="100%" stopColor="#c084fc" stopOpacity={0.8} />
+                </linearGradient>
+                <linearGradient
+                  id="revenueGradient"
+                  x1="0"
+                  y1="0"
+                  x2="1"
+                  y2="0"
+                >
+                  <stop offset="0%" stopColor="#34d399" stopOpacity={0.8} />
+                  <stop offset="100%" stopColor="#10b981" stopOpacity={0.8} />
+                </linearGradient>
+              </defs>
+            </LineChart>
+          </ResponsiveContainer>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </motion.div>
     </div>
   );
 }
