@@ -1,14 +1,39 @@
-"use client"; // ✅ Must be at the top
+"use client";
 
 import { useFetch } from "@/hooks/useFetch";
 import { Post } from "@/types";
 import Link from "next/link";
 import Skeleton from "@/components/ui/Skeleton";
-import { motion } from "framer-motion";
+import { motion, Variants, easeInOut } from "framer-motion";
 
 interface PageProps {
-  params: { id: string } | any;
+  params: { id: string };
 }
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: easeInOut,
+    },
+  },
+};
+
+const cardVariants: Variants = {
+  hidden: { opacity: 0, scale: 0.95 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.5,
+      ease: easeInOut,
+    },
+  },
+  hover: { scale: 1.02 },
+};
 
 export default function PostDetails({ params }: PageProps) {
   const {
@@ -29,9 +54,9 @@ export default function PostDetails({ params }: PageProps) {
   return (
     <motion.div
       className="max-w-4xl mx-auto p-6"
-      initial={{ opacity: 0, y: 40 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
     >
       {/* Back Link */}
       <Link
@@ -44,10 +69,10 @@ export default function PostDetails({ params }: PageProps) {
       {/* Post Card */}
       <motion.article
         className="bg-gradient-to-tr from-white via-indigo-50 to-indigo-100 rounded-3xl shadow-sm p-8 hover:shadow-3xl transition-shadow duration-500"
-        initial={{ scale: 0.95, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        whileHover={{ scale: 1.02 }}
+        variants={cardVariants}
+        initial="hidden"
+        animate="visible"
+        whileHover="hover"
       >
         <h1 className="text-4xl font-extrabold text-gray-900 mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-500">
           {post?.title}
