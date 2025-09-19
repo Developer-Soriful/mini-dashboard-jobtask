@@ -14,7 +14,7 @@ export default function Card({ title, body, href }: CardProps) {
     <motion.div
       whileHover={{ y: -8, scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      className="bg-white rounded-3xl shadow-sm border border-gray-200 overflow-hidden flex flex-col justify-between transition-all duration-300 cursor-pointer"
+      className="rounded-3xl shadow-sm border border-gray-200 overflow-hidden flex flex-col justify-between transition-all duration-300 cursor-pointer"
     >
       <Link href={href} className="flex flex-col h-full">
         <div className="p-6 flex-1">
