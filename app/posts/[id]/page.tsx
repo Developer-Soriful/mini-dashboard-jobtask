@@ -12,52 +12,50 @@ const containerVariants: Variants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }, // Using cubic-bezier array instead of string
+    transition: { duration: 0.6, ease: "easeInOut" },
   },
 };
 
 const cardVariants: Variants = {
   hidden: { opacity: 0, scale: 0.95 },
-  visible: { 
-    opacity: 1, 
-    scale: 1, 
-    transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] } 
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.5, ease: "easeInOut" },
   },
   hover: { scale: 1.02 },
 };
 
-// Custom fetch hook that handles null URLs
+// Custom fetch hook
 function usePostFetch(postId: string | null) {
   const [data, setData] = useState<Post | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Reset state when postId changes
-    setData(null);
-    setError(null);
-    
     if (!postId) {
       setLoading(true);
       return;
     }
 
     setLoading(true);
-    
+
     const fetchData = async () => {
       try {
         const response = await fetch(
           `https://jsonplaceholder.typicode.com/posts/${postId}`
         );
-        
+
         if (!response.ok) {
           throw new Error(`Failed to fetch post: ${response.status}`);
         }
-        
+
         const postData = await response.json();
         setData(postData);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "An unknown error occurred");
+        setError(
+          err instanceof Error ? err.message : "An unknown error occurred"
+        );
       } finally {
         setLoading(false);
       }
@@ -69,13 +67,16 @@ function usePostFetch(postId: string | null) {
   return { data, loading, error };
 }
 
-export default function PostDetails({ params }: { params: Promise<{ id: string }> }) {
+export default function PostDetails({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const [postId, setPostId] = useState<string | null>(null);
-  
-  // Resolve the params promise
+
   useEffect(() => {
     let isMounted = true;
-    
+
     async function resolveParams() {
       try {
         const resolved = await params;
@@ -89,9 +90,9 @@ export default function PostDetails({ params }: { params: Promise<{ id: string }
         }
       }
     }
-    
+
     resolveParams();
-    
+
     return () => {
       isMounted = false;
     };
@@ -110,11 +111,13 @@ export default function PostDetails({ params }: { params: Promise<{ id: string }
         >
           ← Back to Posts
         </Link>
-        
+
         <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
-          <h2 className="text-red-800 font-semibold text-lg mb-2">Failed to load post</h2>
+          <h2 className="text-red-800 font-semibold text-lg mb-2">
+            Failed to load post
+          </h2>
           <p className="text-red-600 mb-4">{error || "Post not found"}</p>
-          <button 
+          <button
             onClick={() => window.location.reload()}
             className="px-4 py-2 bg-red-100 hover:bg-red-200 text-red-800 rounded-md transition-colors"
           >
@@ -131,7 +134,6 @@ export default function PostDetails({ params }: { params: Promise<{ id: string }
       animate="visible"
       variants={containerVariants}
     >
-      {/* Back Link */}
       <Link
         href="/posts"
         className="inline-flex items-center text-indigo-500 hover:text-indigo-700 font-medium mb-6 transition-all duration-300"
@@ -139,7 +141,6 @@ export default function PostDetails({ params }: { params: Promise<{ id: string }
         ← Back to Posts
       </Link>
 
-      {/* Post Card */}
       <motion.article
         className="bg-gradient-to-tr from-white via-indigo-50 to-indigo-100 rounded-3xl shadow-sm p-8 hover:shadow-3xl transition-shadow duration-500"
         variants={cardVariants}
@@ -151,14 +152,18 @@ export default function PostDetails({ params }: { params: Promise<{ id: string }
           {post.title}
         </h1>
 
-        <p className="text-gray-700 leading-relaxed text-lg mb-8">{post.body}</p>
+        <p className="text-gray-700 leading-relaxed text-lg mb-8">
+          {post.body}
+        </p>
 
         <div className="mt-6 pt-6 border-t border-gray-200 flex flex-col sm:flex-row sm:justify-between gap-2 sm:gap-0 text-gray-600 text-sm">
           <p>
-            <span className="font-semibold text-gray-800">Post ID:</span> {post.id}
+            <span className="font-semibold text-gray-800">Post ID:</span>{" "}
+            {post.id}
           </p>
           <p>
-            <span className="font-semibold text-gray-800">User ID:</span> {post.userId}
+            <span className="font-semibold text-gray-800">User ID:</span>{" "}
+            {post.userId}
           </p>
         </div>
       </motion.article>
