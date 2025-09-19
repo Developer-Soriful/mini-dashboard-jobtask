@@ -2,6 +2,7 @@
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FaUserCircle } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 
 export default function LoginButton() {
   const { data: session } = useSession();
@@ -39,9 +40,12 @@ export default function LoginButton() {
   return (
     <button
       onClick={() => signIn("google")}
-      className="w-full px-4 py-2 rounded-full bg-blue-500 hover:bg-blue-600 text-white font-medium transition-all"
+      className="w-full flex  items-center justify-center gap-4  py-2 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 font-medium transition-all"
     >
-      Sign in with Google
+      <span>
+        <FcGoogle size={20}/>
+      </span>{" "}
+      <span>Google Login</span>
     </button>
   );
 }
