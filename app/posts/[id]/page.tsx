@@ -4,15 +4,15 @@ import { useState, useEffect } from "react";
 import { Post } from "@/types";
 import Link from "next/link";
 import Skeleton from "@/components/ui/Skeleton";
-import { motion, Variants } from "framer-motion";
+import { motion, Variants, easeInOut } from "framer-motion";
 
-// Fixed Motion Variants with proper easing types
+// Motion Variants with proper easing
 const containerVariants: Variants = {
   hidden: { opacity: 0, y: 40 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: "easeInOut" },
+    transition: { duration: 0.6, ease: easeInOut },
   },
 };
 
@@ -21,7 +21,7 @@ const cardVariants: Variants = {
   visible: {
     opacity: 1,
     scale: 1,
-    transition: { duration: 0.5, ease: "easeInOut" },
+    transition: { duration: 0.5, ease: easeInOut },
   },
   hover: { scale: 1.02 },
 };
