@@ -6,19 +6,23 @@ import Link from "next/link";
 import Skeleton from "@/components/ui/Skeleton";
 import { motion, Variants } from "framer-motion";
 
-// Motion Variants
+// Fixed Motion Variants with proper easing types
 const containerVariants: Variants = {
   hidden: { opacity: 0, y: 40 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: "easeInOut" },
+    transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }, // Using cubic-bezier array instead of string
   },
 };
 
 const cardVariants: Variants = {
   hidden: { opacity: 0, scale: 0.95 },
-  visible: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: "easeInOut" } },
+  visible: { 
+    opacity: 1, 
+    scale: 1, 
+    transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] } 
+  },
   hover: { scale: 1.02 },
 };
 
